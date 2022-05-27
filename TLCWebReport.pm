@@ -235,8 +235,20 @@ sub fillDates
     my ($self) = shift;
     my $script = 
     "
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
     var first = 1;
-    var doms = document.querySelectorAll('input');
+    var doms = iframe.querySelectorAll('input');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -264,7 +276,7 @@ sub fillDates
     }
     
     first = 1;
-    doms = document.querySelectorAll('input');
+    doms = iframe.querySelectorAll('input');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -291,7 +303,19 @@ sub clickFinish
     my ($self) = shift;
     
     my $script = "
-    var doms = document.querySelectorAll('select');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.querySelectorAll('select');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -309,7 +333,19 @@ sub clickFinish
     sleep 1;
     $script = 
     "
-    var doms = document.querySelectorAll('button');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.querySelectorAll('button');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -329,7 +365,19 @@ sub isReportRunning
     my ($self) = shift;
     my $script = 
     "
-    var doms = document.querySelectorAll('span');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.querySelectorAll('span');
     for(var i=0;i<doms.length;i++)
     {   
         var ttext = doms[i].innerHTML;
@@ -349,7 +397,19 @@ sub seeIfReportIsDone
     my ($self) = shift;
     my $script = 
     "
-    var doms = document.querySelectorAll('button');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.querySelectorAll('button');
     for(var i=0;i<doms.length;i++)
     {   
         var srcattr = doms[i].getAttribute('onclick');
@@ -369,10 +429,22 @@ sub selectAlls
     my ($self) = shift;
     my $script = 
     "
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
     var changed = 0;
     var howMany = 0;
     var noOptions = 0;
-    var doms = document.querySelectorAll('select');
+    var doms = iframe.querySelectorAll('select');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -454,8 +526,20 @@ sub getSingleSelectIDs
     my ($self) = shift;
     my $script = 
     "
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
     var allIDs = '';
-    var doms = document.querySelectorAll('select');
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var allIDs = '';
+    var doms = iframe.querySelectorAll('select');
     for(var i=0;i<doms.length;i++)
     {   
         var thisID = doms[i].id;
@@ -501,8 +585,20 @@ sub containsUnfillableMulti
     my ($self) = shift;
     my $script = 
     "
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
     var allIDs = '';
-    var doms = document.querySelectorAll('span');
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var allIDs = '';
+    var doms = iframe.querySelectorAll('span');
     for(var i=0;i<doms.length;i++)
     {   
         var thisHTML = doms[i].innerHTML;
@@ -590,7 +686,19 @@ sub selectsChooseSpecificOption
     $option =~ s/ /\\s/g;
     my $script = 
     "
-    var doms = document.getElementById('".$selectID."');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.getElementById('".$selectID."');
     var index = 0;
     var found = -1;
     if(doms)
@@ -623,7 +731,19 @@ sub selectsChooseAnyOption
     my $selectID = shift;
     my $script = 
     "
-    var doms = document.getElementById('".$selectID."');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.getElementById('".$selectID."');
     var index = 0;
     var found = -1;
     if(doms)
@@ -656,7 +776,19 @@ sub clickPopulateButtons
     # print "Clicking Populate Buttons\n";
     my $script = 
     "
-    var doms = document.getElementsByTagName('button');
+    var iframes = document.querySelectorAll('iframe');
+    var iframe;
+    for(var i=0;i<iframes.length;i++)
+    {
+        if(iframes[i].getAttribute('src') == 'about:blank')
+        {
+            iframe = iframes[i];
+            break;
+        }
+    }
+    var allIDs = '';
+    iframe = iframe.contentDocument || iframe.contentWindow.document;
+    var doms = iframe.getElementsByTagName('button');
     var found = 0;
     for(var i=0;i<doms.length;i++)
     {
@@ -679,16 +811,42 @@ sub clickDownloadReportCSV
     my ($self) = shift;
     my $script = 
     "
-    var tab = document.getElementById('_NS_runIn');
-    tab.dispatchEvent(new MouseEvent('mouseup', { 'bubbles': true }));
-
-    tab = document.getElementById('_NS_viewInExcel');
-    tab.dispatchEvent(new MouseEvent('mouseover', { 'bubbles': true }));
-
-    tab = document.getElementById('_NS_viewInCSV');
-    tab.dispatchEvent(new MouseEvent('mouseup', { 'bubbles': true }));
+    document.getElementById('com.ibm.bi.classicviewer.runMenu').click();
     ";
     $self->doJS($script, 1);
+    $script =
+    "
+    var doms = document.querySelectorAll('li');
+    for(var i=0;i<doms.length;i++)
+    {
+        if(doms[i].getAttribute('aria-label'))
+        {
+            var menuItem = doms[i].getAttribute('aria-label');
+            if(menuItem.match(/Run CSV/))
+            {
+                return doms[i].id;
+            }
+        }
+    }
+    return 0;
+    ";
+    my $menuAppeared = $self->doJS($script, 1);
+    my $tries = 0;
+    while(!$menuAppeared)
+    {
+        sleep 1;
+        if($tries > 10)
+        {
+            $self->giveUp("Couldn't get the Download menu to appear. Quitting");
+        }
+        $tries++;
+        $menuAppeared = $self->doJS($script, 1);
+    }
+    $self->{log}->addLine(Dumper($self->{driver}->find_element_by_id($menuAppeared)));
+    $self->{driver}->mouse_move_to_location(element => $self->{driver}->find_element_by_id($menuAppeared));
+    $self->takeScreenShot('moved_mouse');
+    $self->{driver}->click('LEFT');
+
     print "Clicked Download\n";
     my $handles = $self->{driver}->get_window_handles;
     while(!$handles->[1])

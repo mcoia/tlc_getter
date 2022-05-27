@@ -12,7 +12,7 @@ our $maxPageLoops = 10;
 sub new
 {
     my $class = shift;
-    my %phandles = ( "Log On to IBM Cognos Software" => "loginPage", "IBM Cognos Software" => "reportSearch", "IBM Cognos Enhanced Search" => "reportSearch", "Public Folders" => "reportSearch", "Search" => "clickSearchResult" );
+    my %phandles = ( "LS2 Reports" => "loginPage", "Welcome" => "reportSearch", "IBM Cognos Enhanced Search" => "reportSearch", "Public Folders" => "reportSearch", "Search" => "clickSearchResult" );
     my $self = 
     {
         name => shift,
@@ -164,7 +164,7 @@ sub loginPage
 
     my $script = 
     "
-    var doms = document.getElementById('CAMUsername');
+    var doms = document.getElementById('sample.username');
     doms.value = '".$self->{webLogin}."';
     return 1;
     ";
@@ -172,7 +172,7 @@ sub loginPage
     
     $script = 
     "
-    var doms = document.getElementById('CAMPassword');
+    var doms = document.getElementById('sample.password');
     doms.value = '".$self->{webPass}."';
     ";
     doJS($self, $script, 1);
@@ -180,7 +180,7 @@ sub loginPage
 
     $script = 
     "
-    var doms = document.getElementById('cmdOK');
+    var doms = document.getElementById('sample.login');
     doms.click();
     ";
     doJS($self, $script, 1);
@@ -193,14 +193,44 @@ sub loginPage
 sub reportSearch
 {
     my ($self) = @_[0];
-    # print "Handling Report Search\n";
-    my $title = getTitle($self);
-    my $afterTitle = $title;
-    my $script = 
+    my $searchBoxPresent = 0;
+    my $script =
     "
-    var doms = document.getElementById('stext');
+    var domexists = document.querySelector('input.searchinput');
+    if(domexists)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+    ";
+    my $tries = 0;
+    if(!doJS($self, $script, 1))
+    {
+        # Initial search click
+        doJS($self, "document.getElementById('com.ibm.bi.search.search').click();", 1);
+    }
+    $searchBoxPresent = doJS($self, $script, 1);
+    while(!$searchBoxPresent)
+    {
+        print "searchBoxPresent = $searchBoxPresent\n";
+        $searchBoxPresent = doJS($self, $script, 1);
+        $self->takeScreenShot('waiting_search_box');
+        sleep 1;
+        $tries++;
+        if($tries > 10)
+        {
+            giveUp($self, "Couldn't get the search box to appear. Quitting");
+        }
+    }
+
+    $script =
+    "
+    var doms = document.querySelector('input.searchinput');
     doms.value = '".$self->{name}."';
-    var evt = new CustomEvent('keypress');
+    var evt = new CustomEvent('search');
     evt.which = 13;
     evt.keyCode = 13;
     doms.dispatchEvent(evt);
@@ -208,14 +238,10 @@ sub reportSearch
     ";
     doJS($self, $script, 1);
 
-    while ($afterTitle eq $title)
-    {   
-        sleep 1;
-        $afterTitle = getTitle($self);
-    }
     # print "finished\n";
     sleep 5;
     $self->takeScreenShot('after_search');
+    clickSearchResult($self);
     return 1;
 }
 
@@ -229,16 +255,14 @@ sub clickSearchResult
     my $script = 
     "
     var stop = 0;
-    var doms = document.querySelectorAll('td.tableText > div > a');
+    var doms = document.querySelectorAll('td.multiProp > div > div.clickable');
     for(var i=0;i<doms.length;i++)
     {
         if(!stop)
         {
-            var thisaction = doms[i].getAttribute('onClick');
-
-            if(thisaction.match(/MainSearchTurnUrlIntoPostSubmission/gi))
+            if(doms[i].getAttribute('aria-label'))
             {
-                var linkText = doms[i].innerHTML;
+                var linkText = doms[i].getAttribute('aria-label');
                 if(linkText.match(/".$searchString."/gi))
                 {
                     console.log(linkText);
@@ -260,6 +284,8 @@ sub clickSearchResult
     {
         sleep 1;
         $self->takeScreenShot('clicked_report_from_results');
+        # allow the iframe to finish
+        sleep 5;
         return 1;
     }
     return 0;
