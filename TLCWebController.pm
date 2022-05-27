@@ -214,6 +214,7 @@ sub reportSearch
         $afterTitle = getTitle($self);
     }
     # print "finished\n";
+    sleep 5;
     $self->takeScreenShot('after_search');
     return 1;
 }
